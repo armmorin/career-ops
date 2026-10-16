@@ -60,6 +60,17 @@ import { fileURLToPath, pathToFileURL } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = __dirname;
 
+function commandEnv() {
+  const bins = [dirname(process.execPath)];
+  const home = process.env.HOME;
+  if (home) {
+    bins.push(join(home, '.local', 'bin'), join(home, '.bun', 'bin'));
+  }
+  const inherited = (process.env.PATH || '').split(':');
+  const pathValue = [...bins, ...inherited].filter((dir, index, all) => dir && all.indexOf(dir) === index).join(':');
+  return { ...process.env, PATH: pathValue };
+}
+
 export function createReexecMarker() {
   const directory = realpathSync(mkdtempSync(join(tmpdir(), 'career-ops-reexec-')));
   const path = join(directory, 'marker');
@@ -4665,14 +4676,17 @@ async function apply() {
 
     // 5. Install any new dependencies
     try {
-      execSync('npm install --silent', { cwd: ROOT, timeout: NPM_INSTALL_TIMEOUT_MS });
+      execSync('npm install --silent', { cwd: ROOT, env: commandEnv(), timeout: NPM_INSTALL_TIMEOUT_MS });
     } catch {
       console.log('npm install skipped (may need manual run)');
     }
 
-    // 5b. Ensure Playwright browser binary is up to date after npm install
+    // 5b. Ensure Playwright browser binary is up to date after npm install.
+    // npx is taken from the same bin directory as this Node process, and the
+    // working directory stays the package root, so a spawn from another
+    // directory cannot install into that directory.
     try {
-      execSync('npx playwright install chromium', { cwd: ROOT, timeout: PLAYWRIGHT_INSTALL_TIMEOUT_MS, stdio: 'ignore' });
+      execSync('npx playwright install chromium', { cwd: ROOT, env: commandEnv(), timeout: PLAYWRIGHT_INSTALL_TIMEOUT_MS, stdio: 'ignore' });
     } catch {
       console.log('playwright install skipped (run manually: npx playwright install chromium)');
     }

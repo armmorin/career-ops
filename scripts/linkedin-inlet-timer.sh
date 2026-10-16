@@ -3,7 +3,8 @@
 # searches each confirmed title. Does not evaluate or submit.
 set -euo pipefail
 
-export PATH="${HOME}/.local/bin:/usr/bin:/bin"
+# shellcheck source=timer-path.sh
+. "$(dirname "$0")/timer-path.sh"
 ROOT=/home/armando/career-ops
 ENDPOINT=http://127.0.0.1:8089/mcp
 
