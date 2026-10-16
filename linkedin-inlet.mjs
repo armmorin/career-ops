@@ -21,6 +21,7 @@ import { isMainModule } from './lib/is-main-module.mjs';
 import { localToday } from './lib/local-today.mjs';
 import { parseScanHistoryLine } from './lib/scan-history-columns.mjs';
 import { getCareerOpsRoot } from './path-resolver.mjs';
+import { personScanBlock } from './people.mjs';
 import { appendToPipeline, appendToScanHistory, formatPipelineOffer, normalizeUrlForDedup, PIPELINE_PATH, PORTALS_PATH, SCAN_HISTORY_PATH } from './scan.mjs';
 import { loadTitleFilter, runScheduledInlet, scheduleQueries, selectByTitle, selectUnseenOffers } from './job-agent-inlet.mjs';
 
@@ -323,6 +324,12 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help) {
     printHelp();
+    return;
+  }
+  const personBlock = personScanBlock(getCareerOpsRoot());
+  if (personBlock) {
+    console.error(`Error: ${personBlock}`);
+    process.exitCode = 1;
     return;
   }
   const titleFilter = loadTitleFilter(PORTALS_PATH);

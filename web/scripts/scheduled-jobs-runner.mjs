@@ -15,6 +15,7 @@ import { nextScheduledRun } from "../src/lib/scheduled-cadence.mjs";
 import { isMainModule } from "../../lib/is-main-module.mjs";
 import { scheduledRunnerResourcePath, scheduledStorePath } from "../src/lib/scheduled-runner-path.mjs";
 import { getCareerOpsRoot } from "../../path-resolver.mjs";
+import { personScanBlock } from "../../people.mjs";
 
 const CODE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 export const MAX_RUNS = 100;
@@ -288,6 +289,8 @@ function requestedJobId(args) {
 
 async function main() {
   const root = getCareerOpsRoot();
+  const personBlock = personScanBlock(root);
+  if (personBlock) throw new Error(personBlock);
   const storePath = scheduledStorePath(root);
   const runnerResource = runnerResourcePath(storePath);
   const manualJobId = requestedJobId(process.argv.slice(2));

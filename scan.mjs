@@ -80,6 +80,7 @@ import { SCAN_HISTORY_COLUMNS, parseScanHistoryLine } from './lib/scan-history-c
 import { escapeFormulaCell } from './lib/tsv-formula-escape.mjs';
 import { promoteKnownFragmentIdentity } from './url-key.mjs';
 import { getCareerOpsRoot } from './path-resolver.mjs';
+import { personScanBlock } from './people.mjs';
 import { checkLivenessViaApi } from './liveness-api.mjs';
 
 const CODE_ROOT = path.dirname(fileURLToPath(import.meta.url));
@@ -3895,6 +3896,11 @@ const USAGE = `Usage:
 async function main() {
   const args = process.argv.slice(2);
   validateFlags(args, KNOWN_FLAGS, USAGE, { valueFlags: VALUE_FLAGS });
+  const personBlock = personScanBlock(DATA_ROOT);
+  if (personBlock) {
+    console.error(`Error: ${personBlock}`);
+    process.exit(1);
+  }
   const dryRun = args.includes('--dry-run');
   const jsonMode = args.includes('--json');
   if (jsonMode) console.log = console.error.bind(console);

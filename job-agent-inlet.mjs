@@ -19,6 +19,7 @@ import { join } from 'node:path';
 
 import { isMainModule } from './lib/is-main-module.mjs';
 import { getCareerOpsRoot } from './path-resolver.mjs';
+import { personScanBlock } from './people.mjs';
 import * as yaml from 'js-yaml';
 
 import { normalizeCompanyName } from './invite-match.mjs';
@@ -416,6 +417,12 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help) {
     printHelp();
+    return;
+  }
+  const personBlock = personScanBlock(getCareerOpsRoot());
+  if (personBlock) {
+    console.error(`Error: ${personBlock}`);
+    process.exitCode = 1;
     return;
   }
   const titleFilter = loadTitleFilter(PORTALS_PATH);

@@ -72,6 +72,7 @@ import { validateFlags } from './lib/cli-flags.mjs';
 import { isMainModule } from './lib/is-main-module.mjs';
 import { boardKey, loadDeadBoards, recordBoardFailure, recordBoardResult, saveDeadBoards, shouldSkipDeadBoard } from './dead-boards.mjs';
 import { getCareerOpsRoot } from './path-resolver.mjs';
+import { personScanBlock } from './people.mjs';
 import { barePrefixDomainKeywords, buildDomainFilter } from './title-keywords.mjs';
 import { KNOWN_ATS_VENDORS } from './ats-vendor.mjs';
 import { loadHistoryAtsSeeds } from './history-ats-seeds.mjs';
@@ -1097,6 +1098,11 @@ function isoDay(v) {
 
 async function main() {
   const opts = parseArgs(process.argv);
+  const personBlock = personScanBlock(DATA_ROOT);
+  if (personBlock) {
+    console.error(`Error: ${personBlock}`);
+    process.exit(1);
+  }
   let checkpoint = null;
   if (opts.resume) {
     const cp = loadCheckpoint();

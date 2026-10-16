@@ -34,7 +34,7 @@ const STYLE = `
 @media(prefers-reduced-motion:reduce){.co-mdrawer,.co-mscrim{transition:none}.co-pulse{animation:none}}
 `;
 
-export function MobileNav() {
+export function MobileNav({ person }: { person: { label: string } }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLElement>(null);
@@ -123,6 +123,7 @@ export function MobileNav() {
           </button>
         </div>
       </header>
+      <p className="break-all border-b border-border px-4 pb-2 text-[10px] leading-snug text-faint md:hidden">{person.label}</p>
 
       <div className={cn("co-mscrim md:hidden", open && "open")} onClick={() => setOpen(false)} aria-hidden />
 
