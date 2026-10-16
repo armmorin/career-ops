@@ -111,6 +111,8 @@ config/local-paths.txt
 portals.yml
 modes/_profile.md
 modes/_custom.md
+# Personal fork specification. Not an upstream doc.
+docs/PERSONAL_CAREER_PIPELINE.md
 modes/_brief.md
 voice-dna.md
 .update-dismissed
