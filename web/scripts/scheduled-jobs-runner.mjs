@@ -156,18 +156,21 @@ function writeJobPortals(root, job) {
   if (!positive.length && !fallbackPositive.length) {
     throw new Error("Scheduled scans require title keywords in the job or portals.yml title_filter.positive.");
   }
+  const existingTitles = base.title_filter || {};
   base.title_filter = {
-    ...(base.title_filter || {}),
+    ...existingTitles,
     positive: positive.length ? positive : fallbackPositive,
-    negative: Array.isArray(filters.negative) ? filters.negative : [],
+    negative: Array.isArray(filters.negative) ? filters.negative : (existingTitles.negative || []),
   };
   if (base.title_filter_full) base.title_filter_full = { ...base.title_filter_full, ...base.title_filter };
+  const existingLocations = base.location_filter || {};
+  const listedOrExisting = (value, existing) => (Array.isArray(value) ? value : (Array.isArray(existing) ? existing : []));
   base.location_filter = {
-    ...(base.location_filter || {}),
-    allow: Array.isArray(filters.allow) ? filters.allow : [],
-    block: Array.isArray(filters.block) ? filters.block : [],
-    block_hard: Array.isArray(filters.blockHard) ? filters.blockHard : [],
-    always_allow: Array.isArray(filters.alwaysAllow) ? filters.alwaysAllow : [],
+    ...existingLocations,
+    allow: listedOrExisting(filters.allow, existingLocations.allow),
+    block: listedOrExisting(filters.block, existingLocations.block),
+    block_hard: listedOrExisting(filters.blockHard, existingLocations.block_hard),
+    always_allow: listedOrExisting(filters.alwaysAllow, existingLocations.always_allow),
   };
 
   const tempDir = path.join(root, "data", "tmp");

@@ -1,0 +1,9 @@
+[Unit]
+Description=Daily Career Ops LinkedIn job inlet
+
+[Timer]
+OnCalendar=*-*-* 07:15:00
+Persistent=false
+
+[Install]
+WantedBy=timers.target

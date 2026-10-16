@@ -1,0 +1,10 @@
+[Unit]
+Description=Career Ops Hub and employer-board scan
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/armando/career-ops
+Environment=HOME=/home/armando
+ExecStart=/home/armando/career-ops/scripts/hub-scan-timer.sh
+TimeoutStartSec=90min

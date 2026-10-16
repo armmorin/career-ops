@@ -149,6 +149,30 @@ test("scheduled overlay falls back to portal title keywords and preserves hard l
   }
 });
 
+test("omitted location filters keep the portal allow list", () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), "career-ops-scheduled-keep-allow-"));
+  fs.writeFileSync(path.join(temp, "portals.yml"), "title_filter:\n  positive: [engineer]\nlocation_filter:\n  allow: [Aarhus]\n  block_hard: [Brazil]\n", "utf8");
+  const job = {
+    id: "11111111-1111-4111-8111-111111111111",
+    engine: "portals",
+    filters: { sinceDays: 7 },
+  };
+  try {
+    let overlay;
+    const result = executeJob(temp, job, {
+      spawnFn: (_node, _args, options) => {
+        overlay = yaml.load(fs.readFileSync(options.env.CAREER_OPS_PORTALS, "utf8"));
+        return { status: 0, stdout: "New offers added: 0\n", stderr: "" };
+      },
+    });
+    assert.equal(result.state, "success");
+    assert.deepEqual(overlay.location_filter.allow, ["Aarhus"]);
+    assert.deepEqual(overlay.location_filter.block_hard, ["Brazil"]);
+  } finally {
+    fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
 test("scheduled scan never starts without title keywords", () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), "career-ops-scheduled-no-titles-"));
   fs.writeFileSync(path.join(temp, "portals.yml"), "title_filter: {}\n", "utf8");

@@ -1,0 +1,10 @@
+[Unit]
+Description=Career Ops Danish job inlet
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/armando/career-ops
+Environment=HOME=/home/armando
+ExecStart=/home/armando/career-ops/scripts/job-agent-inlet-timer.sh
+TimeoutStartSec=45min

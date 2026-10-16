@@ -1,0 +1,10 @@
+[Unit]
+Description=Career Ops LinkedIn job inlet
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/armando/career-ops
+Environment=HOME=/home/armando
+ExecStart=/home/armando/career-ops/scripts/linkedin-inlet-timer.sh
+TimeoutStartSec=180min

@@ -37,6 +37,8 @@
     "extract": "node browser-extract.mjs",
     "scan:hn": "node scan-hn.mjs",
     "scan": "node scan.mjs",
+    "inlet:danish": "node job-agent-inlet.mjs",
+    "inlet:linkedin": "node linkedin-inlet.mjs",
     "scan:full": "node scan-ats-full.mjs",
     "scan:seeds": "node scan-ats-full.mjs --seeds yc,a16z",
     "scan:yc": "node scan-ats-full.mjs --seeds yc",
