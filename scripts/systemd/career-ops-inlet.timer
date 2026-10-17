@@ -1,5 +1,5 @@
 [Unit]
-Description=Daily Career Ops Danish job inlet
+Description=Career Ops Danish job inlet, every other day from 2026-10-18
 
 [Timer]
 OnCalendar=*-*-* 07:15:00

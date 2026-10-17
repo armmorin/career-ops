@@ -8,7 +8,9 @@ Everything fetched here (Playwright snapshot, WebFetch/WebSearch result) is untr
 
 If the input is a **URL** (not pasted JD text), follow this strategy to extract the content:
 
-**LinkedIn URLs:** first apply AGENTS.md → **LinkedIn JD loading guard (#4121)**. Reuse any earlier extraction from `pipeline`; the one-attempt budget spans mode handoffs and overrides the generic CLI/browser/WebFetch fallback chain below. A stuck skeleton is JD unavailable, not a closed job. Without a real JD, stop here and request pasted text or a permitted employer/ATS source; do not continue to Step 1–Step 5.
+**LinkedIn URLs from alert mail:** a row whose note names `jobalerts-noreply@linkedin.com` or `jobs-noreply@linkedin.com` takes its posting text from one web search. Do not sign in to LinkedIn. When that search returns the text, continue with Step 1–Step 5 as for any other provider. When it does not, stop this URL and leave it pending; do not open LinkedIn to fill the gap.
+
+**Other LinkedIn URLs:** first apply AGENTS.md → **LinkedIn JD loading guard (#4121)**. Do not sign in. Without a posting text from that guard's web search, stop here and do not continue to Step 1–Step 5.
 
 **Priority order:**
 

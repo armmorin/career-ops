@@ -1,5 +1,5 @@
 [Unit]
-Description=Daily Career Ops Hub and employer-board scan
+Description=Career Ops Hub and employer-board scan, every other day from 2026-10-18
 
 [Timer]
 OnCalendar=*-*-* 07:15:00

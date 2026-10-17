@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
-# Daily inlet. Starts the loopback job-agent when it is down, then searches
-# each confirmed title. Does not evaluate or submit.
+# Danish inlet. Starts the loopback job-agent when it is down, then searches
+# each confirmed title. Runs every other day from 2026-10-18. Does not evaluate or submit.
 set -euo pipefail
 
 # shellcheck source=timer-path.sh
 . "$(dirname "$0")/timer-path.sh"
-ROOT=/home/armando/career-ops
-AGENT=/home/armando/job-agent
+# shellcheck source=every-other-day.sh
+. "$(dirname "$0")/every-other-day.sh"
+if ! on_run_day; then
+  echo "Skipping the Danish inlet. The scanners run every other day from 2026-10-18."
+  exit 0
+fi
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+AGENT="${JOB_AGENT_ROOT:-$ROOT/../job-agent}"
 HEALTH=http://127.0.0.1:43104/health
 
 if ! curl -fsS --max-time 2 "$HEALTH" >/dev/null; then
